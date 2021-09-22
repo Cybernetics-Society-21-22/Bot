@@ -30,8 +30,16 @@ class Info(commands.Cog):
             "Channel Count": len(ctx.guild.channels),
         }
 
-        embed.add_field(name="Server Information", value='\n'.join([f"Member Count: {ctx.guild.member_count - len(bots_in_server)}",
-            f"Channel Count: {len(ctx.guild.channels)}"]), inline=False)
+        embed.add_field(
+            name="Server Information",
+            value="\n".join(
+                [
+                    f"Member Count: {ctx.guild.member_count - len(bots_in_server)}",
+                    f"Channel Count: {len(ctx.guild.channels)}",
+                ]
+            ),
+            inline=False,
+        )
 
         await ctx.send(embed=embed)
 
@@ -54,15 +62,23 @@ class Info(commands.Cog):
         embed.add_field(
             name="**User Information**",
             value="\n".join(
-                [f"Created: <t:{int(ctx.author.created_at.timestamp())}:R>", f"ID: {ctx.author.id}"]
-            ), inline=False
+                [
+                    f"Created: <t:{int(ctx.author.created_at.timestamp())}:R>",
+                    f"ID: {ctx.author.id}",
+                ]
+            ),
+            inline=False,
         )
 
         embed.add_field(
             name="**Member Information**",
             value="\n".join(
-                [f"Joined: <t:{int(ctx.author.joined_at.timestamp())}:R>", f"Roles: {roles}"]
-            ), inline=False
+                [
+                    f"Joined: <t:{int(ctx.author.joined_at.timestamp())}:R>",
+                    f"Roles: {roles}",
+                ]
+            ),
+            inline=False,
         )
 
         await ctx.send(embed=embed)
