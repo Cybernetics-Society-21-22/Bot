@@ -10,9 +10,9 @@ load_dotenv(".env")
 
 TOKEN = getenv("TOKEN")
 PREFIX = "]"
-intents = discord.Intents.all()
-client = commands.Bot(command_prefix=PREFIX,
-                      case_insensitive=True, intents=intents)
+intents = discord.Intents.default()
+intents.members = True
+client = commands.Bot(command_prefix=PREFIX, case_insensitive=True, intents=intents)
 
 
 @commands.command()
@@ -36,10 +36,10 @@ async def on_ready():
     )
 
 
+
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("You're missing a required argument.")
-
 
 client.run(TOKEN)
