@@ -12,10 +12,10 @@ class Info(commands.Cog):
 
     @commands.command()
     async def invite(self, ctx):
-        LINK = "https://discord.gg/SnT6N3ueqs"
+        link = await ctx.channel.create_invite()
         embedVar = discord.Embed(
-            title="Invite", description=LINK, color=COLOUR)
-        await ctx.reply(LINK)
+            title="Invite", description=link, color=COLOUR)
+        await ctx.reply(link)
 
     @commands.command(aliases=["statistics", "stats"])
     async def serverInfo(self, ctx):
