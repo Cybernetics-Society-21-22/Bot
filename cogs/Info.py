@@ -13,8 +13,6 @@ class Info(commands.Cog):
     @commands.command()
     async def invite(self, ctx):
         link = await ctx.channel.create_invite()
-        embedVar = discord.Embed(
-            title="Invite", description=link, color=COLOUR)
         await ctx.reply(link)
 
     @commands.command(aliases=["statistics", "stats"])
