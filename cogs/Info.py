@@ -1,9 +1,11 @@
+"""
+Commands that provide information about the server, and specific users.
+"""
 import discord
-from discord.ext import commands, tasks
+from discord.ext import commands
+from discord.utils import escape_markdown
 
-COLOUR = 0x22C2B6  # gotten from the logo
-
-# Commands that provide information about the server, and specific users.
+embed_color = 0x22C2B6  # Picked up from the Cybernetics Logo
 
 
 class Info(commands.Cog):
@@ -12,59 +14,58 @@ class Info(commands.Cog):
 
     @commands.command()
     async def invite(self, ctx):
-        link = await ctx.channel.create_invite()
-        await ctx.reply(link)
+        link = "https://discord.gg/KcbJYSsVvj"
+        await ctx.reply(link, mention_author=False)
 
-    @commands.command(aliases=["statistics", "stats"])
-    async def serverInfo(self, ctx):
+    @commands.command(aliases=["statistics", "stats", "severinfo"])
+    async def server_info(self, ctx):
+        bots_in_server = [bot for bot in ctx.guild.members if bot.bot]
 
-        listOfBots = [bot.mention for bot in ctx.guild.members if bot.bot]
+        embed = discord.Embed(title=ctx.guild.name, color=embed_color).set_thumbnail(
+            url=ctx.guild.icon_url
+        )
 
-        embedVar = discord.Embed(
-            title=ctx.guild.name, description="", color=COLOUR).set_thumbnail(url=ctx.guild.icon_url)
+        fields = {
+            "Member Count": ctx.guild.member_count - len(bots_in_server),
+            "Channel Count": len(ctx.guild.channels),
+        }
 
-        embedVar.add_field(
-            name="Member Count", value=ctx.guild.member_count - len(listOfBots), inline=True)
+        embed.add_field(name="Server Information", value='\n'.join([f"Member Count: {ctx.guild.member_count - len(bots_in_server)}",
+            f"Channel Count: {len(ctx.guild.channels)}"]), inline=False)
 
-        embedVar.add_field(name="Bot Count", value=str(
-            len(listOfBots)), inline=True)
+        await ctx.send(embed=embed)
 
-        embedVar.add_field(name="Highest Role",
-                           value=ctx.guild.roles[-1], inline=True)
+    @commands.command(aliases=["user", "userinfo"])
+    async def user_info(self, ctx):
 
-        embedVar.add_field(name="Owner",
-                           value=str(ctx.guild.owner.display_name), inline=True)
+        embed_title = escape_markdown(
+            f"{ctx.author.nick} ({ctx.author.name}#{ctx.author.discriminator})"
+            if ctx.author.nick
+            else ctx.author.name
+        )
+        roles = ", ".join(
+            role.mention for role in ctx.author.roles[:0:-1]
+        )  # 0 to remove @everyone and -1 to put in order of hierarchy
 
-        embedVar.add_field(name="No. of Channels",
-                           value=str(len(ctx.guild.voice_channels)+len(ctx.guild.text_channels)), inline=True)
+        embed = discord.Embed(title=embed_title, color=ctx.author.color).set_thumbnail(
+            url=ctx.author.avatar_url
+        )
 
-        await ctx.reply(embed=embedVar)
+        embed.add_field(
+            name="**User Information**",
+            value="\n".join(
+                [f"Created: <t:{int(ctx.author.created_at.timestamp())}:R>", f"ID: {ctx.author.id}"]
+            ), inline=False
+        )
 
-    @commands.command(aliases=["whois", "user"])
-    async def userinfo(self, ctx, member: discord.Member):
-        roles = [role for role in member.roles]
+        embed.add_field(
+            name="**Member Information**",
+            value="\n".join(
+                [f"Joined: <t:{int(ctx.author.joined_at.timestamp())}:R>", f"Roles: {roles}"]
+            ), inline=False
+        )
 
-        embedVar = discord.Embed(
-            title=f"User info of: {member.display_name}", description="", color=COLOUR).set_thumbnail(url=member.avatar_url)
-
-        embedVar.add_field(name="Username", value=member)
-
-        embedVar.add_field(name="User ID", value=member.id)
-
-        embedVar.add_field(name="Created At", value=member.created_at.strftime(
-            "%a, %d %B %Y, %I:%M %p UTC"))
-
-        embedVar.add_field(name="Joined At", value=member.joined_at.strftime(
-            "%a, %d %B %Y, %I:%M %p UTC"))
-
-        embedVar.add_field(name=f"Roles ({len(roles)})", value=" ".join(
-            [role.mention for role in roles]))
-
-        if member.id == 659431002556596234:
-            embedVar.add_field(name="Extra Info",
-                               value="Coolest person to ever live and the person who made this command.", inline=False)
-
-        await ctx.reply(embed=embedVar)
+        await ctx.send(embed=embed)
 
 
 def setup(client):
