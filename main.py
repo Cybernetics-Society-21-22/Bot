@@ -11,7 +11,8 @@ load_dotenv(".env")
 TOKEN = getenv("TOKEN")
 PREFIX = "]"
 intents = discord.Intents.default()
-client = commands.Bot(command_prefix=None, case_insensitive=True, intents=intents)
+intents.members = True
+client = commands.Bot(command_prefix=PREFIX, case_insensitive=True, intents=intents)
 
 
 @commands.command()
@@ -33,6 +34,12 @@ async def on_ready():
             type=discord.ActivityType.competing, name=f"a future Codejam!"
         )
     )
+
+
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send("You're missing a required argument.")
 
 
 client.run(TOKEN)
