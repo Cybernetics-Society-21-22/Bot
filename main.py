@@ -36,10 +36,10 @@ async def on_ready():
     )
 
 
-
 @client.event
 async def on_command_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
         await ctx.send("You're missing a required argument.")
+
 
 client.run(TOKEN)
