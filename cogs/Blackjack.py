@@ -17,9 +17,9 @@ class Card:  # Makes and Shows a Card
 
     def price(self):
         if self.cost >= 10:
-            return 10 #Jack Queen King get converted to 10
+            return 10  # Jack Queen King get converted to 10
         elif self.cost == 1:
-            return 11 # Ace gets converted to 11
+            return 11  # Ace gets converted to 11
         return self.cost
 
 
@@ -77,7 +77,8 @@ class Player:  # A class that has a deck and can either be set to player or deal
         while a_counter != 0 and self.score > 21:
             a_counter -= 1
             self.score -= 10
-        return self.score #Everything in this function before this just converts the Ace into 1 if total is above 21
+        # Everything in this function before this just converts the Ace into 1 if total is above 21
+        return self.score
 
     def show(self):
         return self.cards
@@ -126,28 +127,35 @@ class Game(commands.Cog):
                 for n in self.player.show():
                     await ctx.send(n.show())
                 await ctx.send(f"score: {self.player.check_score()}")
+                if self.player.check_score() == 21:
+                    break
             if bust == 1:
-                await ctx.send("Player busted.")
+                await ctx.send("Player busted. You lose")
                 # Indicator that game has ended
                 await ctx.send('─────────────────────────────────────────────────────────')
                 return 1
         while self.dealer.check_score() < 17:
             if self.dealer.hit() == 1:
-                await ctx.send("Dealer busted")
+                await ctx.send("Dealer busted. You win.")
+                return 1
 
         if self.dealer.check_score() == self.player.check_score():
             await ctx.send("It's a Push (Tie). Better luck next time!")
-        elif self.dealer.check_score() > self.player.check_score():
+        elif self.dealer.check_score() > self.player.check_score() and self.dealer.check_score() < 21:
             await ctx.send("Dealer wins. Good Game!")
-        elif self.dealer.check_score() < self.player.check_score():
+        elif self.dealer.check_score() < self.player.check_score() and self.player.check_score() < 21:
             await ctx.send("Player wins. Congratulations!")
 
         await ctx.send("Dealer's Cards")
         for n in self.dealer.show():
             await ctx.send(n.show())
         await ctx.send(f"score: {self.dealer.check_score()}")
-        if d_status == 1:
+        if self.dealer.check_score() == 21 and self.dealer.check_score() == 21:
+            await ctx.send("Dealer and player both got Blackjack! Better luck next time!")
+        elif self.dealer.check_score() == 21:
             await ctx.send("Dealer got Blackjack! Better luck next time!")
+        elif self.player.check_score() == 21:
+            await ctx.send("Player got a Blackjack! You win!")
 
         # Indicator that game has ended
         await ctx.send("─────────────────────────────────────────────────────────")
