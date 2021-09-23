@@ -141,9 +141,9 @@ class Game(commands.Cog):
 
         if self.dealer.check_score() == self.player.check_score():
             await ctx.send("It's a Push (Tie). Better luck next time!")
-        elif self.dealer.check_score() > self.player.check_score() and self.dealer.check_score() < 21:
+        elif self.dealer.check_score() > self.player.check_score() and self.dealer.check_score() <= 21:
             await ctx.send("Dealer wins. Good Game!")
-        elif self.dealer.check_score() < self.player.check_score() and self.player.check_score() < 21:
+        elif self.dealer.check_score() < self.player.check_score() and self.player.check_score() <= 21:
             await ctx.send("Player wins. Congratulations!")
 
         await ctx.send("Dealer's Cards")
