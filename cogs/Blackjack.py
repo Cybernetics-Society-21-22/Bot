@@ -110,7 +110,7 @@ class Game(commands.Cog):
             if d_status == 1:
                 await ctx.send("Dealer and Player got Blackjack! It's a push. (Tie)")
                 # Indicator that game has ended
-                await ctx.send("─────────────────────────────────────────────────────────")
+            await ctx.send("─────────────────────────────────────────────────────────")
             return 1
 
         cmd = ""
@@ -137,6 +137,8 @@ class Game(commands.Cog):
         while self.dealer.check_score() < 17:
             if self.dealer.hit() == 1:
                 await ctx.send("Dealer busted. You win.")
+                # Indicator that game has ended
+                await ctx.send("─────────────────────────────────────────────────────────")
                 return 1
 
         if self.dealer.check_score() == self.player.check_score():
@@ -150,12 +152,8 @@ class Game(commands.Cog):
         for n in self.dealer.show():
             await ctx.send(n.show())
         await ctx.send(f"score: {self.dealer.check_score()}")
-        if self.dealer.check_score() == 21 and self.dealer.check_score() == 21:
-            await ctx.send("Dealer and player both got Blackjack! Better luck next time!")
-        elif self.dealer.check_score() == 21:
+        if self.dealer.check_score() == 21:
             await ctx.send("Dealer got Blackjack! Better luck next time!")
-        elif self.player.check_score() == 21:
-            await ctx.send("Player got a Blackjack! You win!")
 
         # Indicator that game has ended
         await ctx.send("─────────────────────────────────────────────────────────")
