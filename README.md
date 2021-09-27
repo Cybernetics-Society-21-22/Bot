@@ -14,4 +14,4 @@ When contributing be sure to adhere to the following rules, Any Pull Requests no
 3. Have descriptive commit messages. Messages such as `Update file.py` will not be accepted.
 4. When updating or installing new third-party libraries, be sure to re-generate `requirements.txt` (`pip freeze > requirements.txt` on most systems) and also mention the new library and why you need it
 
-##### This is not a complete list but rather a list meant to give an idea regarding quality
+##### This is not a complete list but rather a list meant to give an idea regarding quality.
