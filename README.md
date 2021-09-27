@@ -12,6 +12,7 @@ When contributing be sure to adhere to the following rules, Any Pull Requests no
 1. Follow [Pep 8](https://www.python.org/dev/peps/pep-0008/).
 2. Use [Black](https://github.com/psf/black) to format.
 3. Have descriptive commit messages. Messages such as `Update file.py` will not be accepted.
-4. When updating or installing new third-party libraries, be sure to re-generate `requirements.txt` (`pip freeze > requirements.txt` on most systems) and also mention the new library and why you need it
+4. When updating or installing new third-party libraries, be sure to re-generate `requirements.txt` (`pip freeze > requirements.txt` on most systems) and also mention the new library and why you need it.
+5. (Highly Recommended) Use [Pre-commit](https://pre-commit.com/).
 
 ##### This is not a complete list but rather a list meant to give an idea regarding quality
